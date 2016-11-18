@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Code Contas</title>
+    <style type="text/css">
+        .pago{
+            color: green;
+        }
+        .nao-pago{
+            color: red;
+        }
+        .contas-pagas{
+            color:green;
+        }
+        .contas-a-pagar{
+            color: red;
+        }
+        .sem-conta{
+            color: gray;
+        }
+        .minha-classe{
+            background-color: burlywood;
+        }
+    </style>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+
+</head>
+<body>
+<div id="app">
+    <h1>{{ title }} </h1>
+    <h3>{{ status }}</h3>
+    <nav>
+        <ul v-for="o in menus">
+            <li><a href="#" @click.prevent="showView(o.id)">{{ o.name }}</a></li>
+        </ul>
+    </nav>
+    <div v-if="activedView == 0 ">
+        <table class="table table-condensed table-hover">
+            <thead>
+                <tr>
+                    <th>Vencimento</th>
+                    <th>Nome</th>
+                    <th>Valor</th>
+                    <th>Paga?</th>
+                    <th>Ações</th>
+                    <th>Pagar Conta</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="o in bills">
+                    <td>{{ o.date_due }}</td>
+                    <td>{{ o.name }}</td>
+                    <td>{{ o.value | currency 'R$ ' }}</td>
+                    <td class="minha-classe" :class="{'pago' : o.done, 'nao-pago': !o.done}">
+                        {{ o.done | doneLabel }}
+                    </td>
+                    <td>
+                        <a href="#" @click.prevent="loadBill(o)">Editar</a>
+                        <a href="#" @click.prevent="deleteBill(o)">Apagar</a>
+                    </td>
+                    <td>
+                        <button class="btn btn-success"> <a  @click.prevent="pagarConta(o)">Conta Paga</a></button>
+                        <button class="btn btn-danger"><a @click.prevent="contaNaoPaga(o)">Conta Não Paga</a></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div v-if="activedView == 1">
+        <form v-on:submit.prevent="submit">
+            <div class="form-group">
+                <label>Vencimento</label>
+                <input v-model="bill.date_due" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Nome:</label>
+                <select v-model="bill.name">
+                    <option v-for="o in names" :value="o">{{ o }}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Valor</label>
+                <input v-model="bill.value" class="form-control">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+
+
+
+<script type="text/javascript" src="https://vuejs.org/js/vue.min.js"></script>
+<script type="text/javascript" src="app.js"></script>
+</body>
+</html>
