@@ -35,20 +35,18 @@ var app = new Vue({
         ]
     },
     computed: {
-        status: function (){
-            if( this.bills.length > 0 ){
-                var count = 0;
-                for (var i in this.bills){
-                    if(!this.bills[i].done){
-                        count++;
-                    }
+        status: function () {
+            if (!this.bills.length > 0) {
+                return false;
+            }
+            var count = 0;
+            for (var i in this.bills) {
+                if (!this.bills[i].done) {
+                    count++;
                 }
-
-                return !count?"Nenhuma Conta a pagar": "Existem "+ count + " contas a serem pagas";
-            }else{
-                return "Nenhuma Conta Cadastrada";
             }
 
+            return count;
         }
     },
    methods:{
@@ -104,6 +102,20 @@ Vue.filter('doneLabel', function (value) {
     }
 
 })
+
+Vue.filter('statusGeneral', function (value) {
+        if(value === false){
+            return "Nenhuma Conta Cadastrada"
+        }
+        if (!value){
+            return "Nenhuma conta a Pagar";
+        }else{
+            return "Existem: "+ value + " contas a serem pagas";
+        }
+
+})
+
+
 
 
 

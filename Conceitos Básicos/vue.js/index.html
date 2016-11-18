@@ -10,13 +10,13 @@
         .nao-pago{
             color: red;
         }
-        .contas-pagas{
+        .green{
             color:green;
         }
-        .contas-a-pagar{
+        .red{
             color: red;
         }
-        .sem-conta{
+        .gray{
             color: gray;
         }
         .minha-classe{
@@ -31,7 +31,7 @@
 <body>
 <div id="app">
     <h1>{{ title }} </h1>
-    <h3>{{ status }}</h3>
+    <h3 :class="{'gray': status === false, 'green': status === 0, 'red': status > 0}">{{ status | statusGeneral }}</h3>
     <nav>
         <ul v-for="o in menus">
             <li><a href="#" @click.prevent="showView(o.id)">{{ o.name }}</a></li>
@@ -58,7 +58,7 @@
                         {{ o.done | doneLabel }}
                     </td>
                     <td>
-                        <a href="#" @click.prevent="loadBill(o)">Editar</a>
+                        <a href="#" @click.prevent="loadBill(o)">Editar</a> |
                         <a href="#" @click.prevent="deleteBill(o)">Apagar</a>
                     </td>
                     <td>
