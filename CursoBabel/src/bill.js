@@ -4,6 +4,7 @@ class BillPay{
             this.name     = '';
             this.value    = 0;
             this.done     = false;
+            Object.assign(this, data);
         }
 
 
@@ -13,6 +14,6 @@ class BillPay{
             name: this.name,
             value: this.value,
             done: this.done
-            }
+            };
     }
 }

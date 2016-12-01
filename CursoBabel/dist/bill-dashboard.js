@@ -6,7 +6,9 @@ window.billDashboardComponent = {
     data: function data() {
         return {
             title: 'DashBoard',
-            activedView: 0
+            activedView: 0,
+            totalPay: 0,
+            totalReceive: 0
         };
     },
     computed: {

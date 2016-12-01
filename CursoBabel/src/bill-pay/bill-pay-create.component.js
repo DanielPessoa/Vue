@@ -10,24 +10,37 @@ const names = [
 
 window.billPayCreateComponent = Vue.extend({
     template: `
-        <form v-on:submit.prevent="submit">
-            <div class="form-group">
-                <label>Vencimento</label>
-                <input v-model="bill.date_due | dateFormat" class="form-control">
+        <div class="container">
+            <div class="row">
+                <form class="col s12" name="form" @submit.prevent="submit">
+                <div class="row">
+                <div class="input-field col s4">
+                  <input class="validate" type="text" v-model="bill.value | numberFormat" >
+                  <label>Valor</label>                   
+                </div>
+                    <div class="input-field col s8">
+                      <input id="pay_day" type="text" class="validate">
+                      <label for="pay_day">Vencimento</label>
+                    </div>  
+                </div>
+                </div>
+                <div class="row">
+                   <div class="input-field col s6">
+                      <select v-model="bill.name">
+                        <option v-for="o in names" :value="o">{{ o }}</option>
+                      </select>
+                      <label>Nome:</label>
+                    </div>
+                </div>
+               <div class="row">
+                 <input id="test5" type="checkbox" v-model="bill.done"/>  
+                 <label for="test5" >Pago?</label>
+                </div>
+                    <button class="btn waves-effect waves-light" type="submit" >Enviar</button>    
+                </form>
             </div>
-            <div class="form-group">
-                <label>Nome:</label>
-                <select v-model="bill.name">
-                    <option v-for="o in names" :value="o">{{ o }}</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Valor</label>
-                <input v-model="bill.value | numberFormat" class="form-control">
-            </div>
-
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+        </div>
+        
 `,
    props: ['bill'],
     data(){
@@ -38,6 +51,11 @@ window.billPayCreateComponent = Vue.extend({
         };
     },
     created() {
+
+        $(document).ready(function() {
+            $('select').material_select();
+        });
+
         if (this.$route.name == 'bill-pay.update'){
             this.formType = 'update';
             this.getBill(this.$route.params.index);
@@ -46,7 +64,7 @@ window.billPayCreateComponent = Vue.extend({
     },
     methods: {
         submit() {
-            let data = this.bill.toJSON();
+            var data = this.bill.toJSON();
             if (this.formType == 'insert') {
                 Bill.save({}, data).then((response) => {
                     this.$dispatch('change-info');

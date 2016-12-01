@@ -28,6 +28,8 @@ window.billDashboardComponent = {
         return {
             title: 'DashBoard',
             activedView: 0,
+            totalPay: 0,
+            totalReceive: 0,
         };
     },
     computed: {
