@@ -1,4 +1,7 @@
 window.billComponent ={
+    components:{
+        'modal' : window.modalComponent
+    },
     template: `
 <ul v-bind:id="o.id"class="dropdown-content" v-for="o in menusDropdown">
     <li v-for="item in o.items">
@@ -28,7 +31,8 @@ window.billComponent ={
         </div>
     </nav>
 </div>   
-    <router-view></router-view>
+<modal></modal>
+   <router-view></router-view>
 
     
 `,
