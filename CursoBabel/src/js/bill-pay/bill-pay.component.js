@@ -62,7 +62,7 @@ window.billPayComponent = {
       },
       updateTotal() {
           Bill.total().then((response) => {
-              this.total = response.data.total;
+            return this.total = response.data.total;
           });
       }
     },

@@ -10,42 +10,43 @@ const names = [
 
 window.billPayCreateComponent = Vue.extend({
     template: `
-        <div class="container">
-            <div class="row">
-            <h2>Nova Conta</h2>
-                <form class="col s12" name="form" @submit.prevent="submit">
+    <div class="container">
+        <div class="row">
+          <h2>Nova Conta</h2>
+            <form name="form" @submit.prevent="submit">
                 <div class="row">
                     <div class="input-field col s6">
-                      <input id="pay_day" type="text" class="validate" placeholder="Informe a data">
-                      <label for="pay_day" class="active">Vencimento</label>
-                    </div> 
-                  <div class="input-field col s6">
-                      <input class="validate" type="text" v-model="bill.value | numberFormat" >
-                      <label class="active">Valor</label>                   
-                  </div>
+                        <label id="payday" class="active" >Vencimento</label>
+                        <input id="payday" type="text" v-model="bill.date_due" | dateFormat placeholder="Informe a data">
+                    </div>
+                    <div class="input-field col s6">
+                          <input class="validate" type="text" v-model="bill.value | numberFormat" >
+                          <label class="active">Valor</label>                   
+                    </div>
                 </div>
-            </div>
                 <div class="row">
-                <div class="input-field col s6">
-                <label class="active">Nome:</label>
-                   <select id="name" v-model="bill.name" class="browser-default">
-                      <option value="" disabled selected>Escolha um nome</option>
-                      <option v-for="o in names" :value="o">{{ o }}</option>
-                   </select>
-                   </div>
+                  <div class="input-field col s6">  
+                    <label class="active">Nome</label>
+                    <select id="name" v-model="bill.name" id="name" class="browser-default">
+                        <option value="" disabled selected>Escolha um nome</option>
+                        <option v-for="o in names" :value="o">
+                        {{ o }}
+                        </option>
+                    </select>
+                  </div>
                    <div class="input-field col s6">
                        <input class="filled-in" id="pago" type="checkbox" v-model="bill.done"/>  
                        <label for="pago" >Pago?</label>
-                   </div>
+                    </div>
                 </div>
                <div class="row">
-               <div class="input-field col s12">
-                 <input type="submit" class="btn btn-large waves-effect waves-light right" value="Enviar"/>
-               </div>
-              </div>      
-                </form>
-            </div>
+                   <div class="input-field col s12">
+                     <input type="submit" class="btn btn-large waves-effect waves-light right" value="Enviar"/>
+                   </div>
+               </div>      
+            </form>
         </div>
+    </div>
         
 `,
    props: ['bill'],
@@ -65,7 +66,7 @@ window.billPayCreateComponent = Vue.extend({
 
         if (this.$route.name == 'bill-pay.update'){
             this.formType = 'update';
-            this.getBill(this.$route.params.index);
+            this.getBill(this.$route.params.id);
         }
 
     },
@@ -74,11 +75,13 @@ window.billPayCreateComponent = Vue.extend({
             var data = this.bill.toJSON();
             if (this.formType == 'insert') {
                 Bill.save({}, data).then((response) => {
+                    Materialize.toast('Conta Criada com sucesso!', 4000);
                     this.$dispatch('change-info');
                     this.$router.go({ name: 'bill-pay.list' });
                 });
             }else{
-                Bill.update({id: this.bill.id, data}).then((response) => {
+                Bill.update({id: this.bill.id}, data).then((response) => {
+                    Materialize.toast('Conta Alterada com sucesso!', 4000);
                     this.$dispatch('change-info');
                     this.$router.go({name: 'bill-pay.list'});
                 });

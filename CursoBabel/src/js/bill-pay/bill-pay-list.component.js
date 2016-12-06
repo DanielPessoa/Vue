@@ -1,11 +1,11 @@
 window.billPayListComponent = Vue.extend({
     components:{
-        'modal': modalComponent
+        'modal' : window.modalComponent
     },
     template: `
         <div class="container">
         <div class="row">
-            <h4>Minhas Contas a Pagar</h4>
+            <h4>Minhas Contas</h4>
             <table class="bordered centered highlight responsive-table z-depth-4">
                     <thead>
                         <tr>
@@ -28,7 +28,7 @@ window.billPayListComponent = Vue.extend({
                         </td>
                         <td>
                             <a v-link="{ name: 'bill-pay.update', params: { id: o.id } }">Editar</a> |
-                            <a href="#" @click.prevent="openModalDelete()">Apagar</a>
+                            <a href="#" @click.prevent="openModalDelete(bill)">Apagar</a>
                         </td>
                      </tr>
                     </tbody>
@@ -41,7 +41,7 @@ window.billPayListComponent = Vue.extend({
             <p><strong>Deseja excluir esta conta?</strong></p>
           </div>
           <div slot="footer"> 
-            <button class="btn btn-flat waves-effect green lighten-2 modal-close modal-action">OK</button>
+            <button class="btn btn-flat waves-effect green lighten-2 modal-close modal-action" @click="deleteBill()" >OK</button>
             <button class="btn btn-flat waves-effect waves-red modal-close modal-action">Cancelar</button>
           </div>
       </modal>
@@ -49,6 +49,7 @@ window.billPayListComponent = Vue.extend({
     data() {
         return {
             bills: [],
+            billToDelete: null,
             modal: {
                 id: 'modal-delete'
             }
@@ -58,34 +59,24 @@ window.billPayListComponent = Vue.extend({
         Bill.query().then((response) => {
             this.bills = response.data;
         });
-        $(document).ready(function(){
-
-            $('#modal1').modal('open');
-        });
-
     },
     methods: {
-        deleteBill(bill) {
+        deleteBill() {
             let confirma = confirm("Deseja deletar essa conta?");
             if (confirma) {
                 let self = this;
-                Bill.delete({id: bill.id}).then((response) => {
-                    self.bills.$remove(bill);
+                Bill.delete({id: this.billToDelete.id}).then((response) => {
+                    self.bills.$remove(this.billToDelete.id);
+                    this.billToDelete = null;
+                    // Materialize.toast('Conta Excluida com sucesso!', 4000);
                     self.$dispatch('change-info');
                 });
-                // var index = this.bills.indexOf(bill);
-                // this.bills.splice(index, 1);
+
             }
         },
-        openModalDelete(){
-            $('#modal-delete').openModal();
-
-
-        }
 
 
     },
-
 
 
 });
