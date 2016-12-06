@@ -1,4 +1,12 @@
 //Material Icons
 @import url(http://fonts.googleapis.com/icon?family=Material+Icons);
 
+@import "variables";
+
 @import "node_modules/materialize-css/sass/materialize";
+
+//Minhas Classes
+
+.my-custom-green{
+  @extend .green, .darken-1
+}
